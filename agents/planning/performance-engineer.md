@@ -34,6 +34,16 @@
 - CLS 유발 요소 (이미지 크기 미지정, 동적 콘텐츠 삽입)
 - INP 영향 (무거운 이벤트 핸들러, 메인 스레드 블로킹)
 
+## 참조 스킬
+
+계획 검토 시 아래 스킬이 설치되어 있다면 해당 기준과 메트릭을 참고하여 더 깊이 있는 검토를 수행하세요:
+
+| 스킬 | 용도 |
+|------|------|
+| `vercel-react-best-practices` | React/Next.js 성능 최적화 패턴 (렌더링, 번들, 비동기) |
+| `vercel:observability` | Speed Insights, Web Analytics, 런타임 로그, Core Web Vitals 모니터링 |
+| `vercel:vercel-functions` | Serverless/Edge Functions 최적화, Fluid Compute, 스트리밍, 타임아웃 설정 |
+
 ### 스케일링
 - 트래픽 증가 시 병목이 될 수 있는 지점
 - 함수 실행 시간 / 타임아웃 고려

@@ -28,6 +28,16 @@
 - 기술 부채가 될 수 있는 설계 결정이 있는지
 - 과도한 설계(over-engineering)가 아닌지
 
+## 참조 스킬
+
+계획 검토 시 아래 스킬이 설치되어 있다면 해당 기준과 패턴을 참고하여 더 깊이 있는 검토를 수행하세요:
+
+| 스킬 | 용도 |
+|------|------|
+| `vercel:nextjs` | App Router 아키텍처, Server Components, RSC 경계 설계 기준 |
+| `vercel-composition-patterns` | React 합성 패턴, compound components, 컴포넌트 분리 기준 |
+| `turborepo` | 모노레포 패키지 경계, 의존성 방향, 내부 패키지 구조 |
+
 ### 기존 코드와의 정합성
 - 기존 아키텍처 패턴과 일관적인지
 - 기존 유틸리티/컴포넌트를 재활용하는지

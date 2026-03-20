@@ -29,6 +29,16 @@
 - Third-party 라이브러리 의존성 보안
 - Open Redirect, SSRF 등 리다이렉트 관련 취약점
 
+## 참조 스킬
+
+계획 검토 시 아래 스킬이 설치되어 있다면 해당 기준과 체크리스트를 참고하여 더 깊이 있는 검토를 수행하세요:
+
+| 스킬 | 용도 |
+|------|------|
+| `security-guidance` | OWASP Top 10 대응, 보안 모범 사례, 취약점 체크리스트 |
+| `vercel:vercel-firewall` | WAF 규칙, IP 차단, Rate Limiting, Bot Protection 설정 |
+| `vercel:auth` | Clerk/Auth0/Descope 인증 패턴, 세션 관리, RBAC 설계 |
+
 ### 데이터 무결성
 - 동시 수정(concurrent modification) 처리
 - 트랜잭션 처리가 필요한 작업 식별

@@ -41,6 +41,12 @@ user-invocable: true
 | `react` | `vercel-labs/skills` | Junior FE |
 | `seo-audit` | `vercel-labs/skills` | SEO Specialist |
 
+### 구현 계획용 (Recommended)
+
+| 스킬 | 소스 | 참조 에이전트 |
+|------|------|-------------|
+| `security-guidance` | `claude-plugins-official` | Security Engineer |
+
 ### 선택 (Optional, Vercel 플러그인 포함)
 
 아래 스킬들은 Vercel 플러그인(`vercel@claude-plugins-official`)에 포함되어 있습니다.
@@ -49,11 +55,14 @@ Vercel 플러그인이 설치되어 있으면 별도 설치 없이 자동으로 
 | 스킬 | 참조 에이전트 |
 |------|-------------|
 | `vercel:shadcn` | UI Designer |
-| `vercel:nextjs` | Senior FE |
-| `vercel:vercel-functions` | Senior FE, BE Engineer |
+| `vercel:nextjs` | Senior FE, Architect, QA Engineer |
+| `vercel:vercel-functions` | Senior FE, BE Engineer, Performance Engineer |
 | `vercel:vercel-storage` | BE Engineer |
 | `vercel:satori` | SEO Specialist |
-| `turborepo` | BE Engineer |
+| `vercel:vercel-firewall` | Security Engineer |
+| `vercel:auth` | Security Engineer |
+| `vercel:observability` | Performance Engineer |
+| `turborepo` | BE Engineer, Architect, DX Engineer |
 
 ---
 
