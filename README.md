@@ -56,7 +56,14 @@
 ## 설치
 
 ```bash
-claude plugins add roto/roto-subagent-band
+# 1. 마켓플레이스 등록
+/plugin marketplace add rotoshine/roto-subagent-band
+
+# 2. 플러그인 설치
+/plugin install roto-subagent-band@rotoshine-roto-subagent-band
+
+# 3. 플러그인 리로드 (설치 직후 또는 업데이트 반영 시)
+/reload-plugins
 ```
 
 ## 설치 후 의존성 체크
