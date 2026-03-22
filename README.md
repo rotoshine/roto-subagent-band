@@ -2,7 +2,7 @@
 
 멀티 서브에이전트 기반 코드 리뷰 + 구현 계획 플러그인 for Claude Code.
 
-## 포함 스킬 (9개)
+## 포함 스킬 (10개)
 
 ### 코드 리뷰 계열
 
@@ -20,6 +20,7 @@
 |------|------|
 | `/roto-band-plan` | 5개 에이전트가 코드베이스 분석 → 다각도 구현 계획 수립 |
 | `/roto-band-plan-execute` | 구현 계획 markdown 기반 Phase별 구현 + 5에이전트 검증 루프 |
+| `/roto-band-plan-reinforce` | 계획을 N회 반복 검토, Critical/Major 시 수정 후 카운터 리셋 재검토 |
 | `/roto-band-plan-review` | 기존 구현 계획을 5개 에이전트가 검토 → 누락/리스크/개선점 보고 |
 
 ### 유틸리티
@@ -84,7 +85,9 @@ claude plugins add roto/roto-subagent-band
 /roto-band-plan 사용자 프로필에 활동 타임라인 추가
 /roto-band-plan-execute docs/plan-timeline.md  # 계획 파일로 구현
 /roto-band-plan-execute 관리자 대시보드 구현    # 계획 수립→구현 한번에
-/roto-band-plan-review docs/plan.md             # 기존 계획 검토
+/roto-band-plan-reinforce plans/plan-auth.md     # 계획 강화 검토 (3회 반복)
+/roto-band-plan-reinforce plans/plan.md --rounds 5  # 5회 반복 검토
+/roto-band-plan-review docs/plan.md             # 기존 계획 1회 검토
 ```
 
 ## 라이선스

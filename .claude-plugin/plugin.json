@@ -1,6 +1,6 @@
 {
   "name": "roto-subagent-band",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "7개 전문 서브 에이전트 기반 멀티 관점 코드 리뷰, 구현 계획 수립 및 실행, 강화 리뷰 스킬 모음",
   "author": {
     "name": "roto"
