@@ -1,0 +1,313 @@
+---
+name: roto-band-plan-execute
+description: 구현 계획 markdown을 기반으로 Phase별 코드 구현을 수행합니다. 각 Phase 완료 후 5에이전트 검증을 거치고, Critical/Major 이슈를 수정한 뒤 다음 Phase로 진행합니다. "계획 실행", "plan execute", "구현 시작", "계획대로 만들어줘", "plan implement" 등을 요청하면 이 스킬을 사용하세요.
+user-invocable: true
+---
+
+# 계획 기반 구현 (Plan Execute)
+
+구현 계획 markdown을 읽고, Phase별로 코드를 구현하며, 각 Phase 완료 시 5개 전문 에이전트가 검증하는 end-to-end 구현 스킬입니다.
+
+**모든 출력은 한국어로 작성한다.**
+
+## 사용 방법
+
+```text
+/roto-band-plan-execute <계획 파일 경로 또는 작업 설명>
+```
+
+| 인자 | 설명 |
+|------|------|
+| `계획 파일 경로` | `/roto-band-plan`이 생성한 markdown 파일 경로, 또는 작업 설명 |
+
+### 예시
+
+```text
+/roto-band-plan-execute docs/plan-timeline.md          # 기존 계획 파일로 구현
+/roto-band-plan-execute 사용자 프로필에 타임라인 추가    # 계획 수립 → 구현까지 한번에
+```
+
+---
+
+## 워크플로우
+
+### Step 1: 계획 확보
+
+#### 1-A: 계획 파일이 주어진 경우
+
+1. Read 도구로 해당 파일을 읽는다.
+2. 파일에서 `#### Phase N:` 패턴을 파싱하여 Phase 목록을 추출한다.
+3. 파일이 없으면 에러: `[ERROR] 계획 파일을 찾을 수 없습니다: <경로>`
+
+#### 1-B: 작업 설명이 주어진 경우
+
+1. `/roto-band-plan`의 워크플로우(Step 1~4)를 그대로 실행하여 계획을 수립한다.
+   - 코드베이스 탐색
+   - 5개 서브에이전트 병렬 실행
+   - 결과 통합 및 계획 작성
+   - 사용자 확인
+2. 확정된 계획을 markdown으로 저장한다.
+
+#### 계획 저장
+
+**저장 경로**: `plans/plan-<slugified-title>.md`
+
+Write 도구로 파일을 생성한다. 계획 내용 전체를 저장하며, 각 Phase의 작업 항목에 상태 컬럼을 추가한다:
+
+```markdown
+#### Phase 1: <단계 이름>
+| # | 작업 | 파일 | 상태 |
+|---|------|------|------|
+| 1 | 작업 설명 | `파일경로` | ⬜ |
+| 2 | 작업 설명 | `파일경로` | ⬜ |
+```
+
+상태 값:
+- `⬜` — 대기
+- `🔄` — 진행 중
+- `✅` — 완료
+- `❌` — 실패
+
+사용자에게 저장 경로를 알린다:
+
+```
+📋 구현 계획이 저장되었습니다: plans/plan-<title>.md
+```
+
+### Step 2: 사용자 확인
+
+AskUserQuestion 도구로 사용자에게 구현 시작 여부를 확인한다:
+
+```
+구현 계획을 확인해주세요.
+
+- 전체 Phase를 순서대로 구현합니다
+- 각 Phase 완료 후 5에이전트 검증을 수행합니다
+- Critical/Major 이슈 발견 시 자동 수정 후 다음 Phase로 진행합니다
+
+시작하려면 "시작" 또는 "OK", 특정 Phase만 실행하려면 Phase 번호를 알려주세요 (예: "2,3")
+```
+
+### Step 3: Phase별 구현 루프
+
+확인된 Phase를 순서대로 실행한다. 각 Phase는 아래 3단계를 거친다.
+
+---
+
+#### 3-A: 구현
+
+Phase의 각 작업 항목을 순서대로 구현한다.
+
+**구현 절차** (작업 하나당):
+
+1. 계획 파일에서 해당 작업의 상태를 `🔄`로 업데이트 (Edit 도구)
+2. 관련 파일을 Read 도구로 읽어 현재 코드 확인
+3. 기존 코드 패턴을 파악하고, 계획의 지시사항에 따라 코드 작성
+4. Edit/Write 도구로 코드 수정/생성
+5. 완료 후 상태를 `✅`로 업데이트
+
+**구현 원칙**:
+- 기존 코드베이스의 패턴과 컨벤션을 따른다
+- CLAUDE.md, `.claude/rules/`에 명시된 규칙을 준수한다
+- import 추가/제거가 필요하면 함께 처리
+- 작업 간 의존성이 있으면 순서를 조정
+- 구현 중 에러 발생 시 해당 작업 상태를 `❌`로 표시하고 사유 기록
+
+각 작업 완료 시 사용자에게 진행 상황을 간략히 출력:
+
+```
+Phase 1 [2/5]: ✅ UserTimeline 컴포넌트 생성 — `src/components/UserTimeline.tsx`
+```
+
+#### 3-B: 빌드 검증
+
+Phase의 모든 작업이 완료되면 기본 검증을 수행한다:
+
+- TypeScript 타입 체크: `npx tsc --noEmit`
+- 타입 에러 발생 시 즉시 수정
+- 테스트 실행: 프로젝트의 테스트 커맨드 (`npx vitest run` 등)
+- 테스트 실패 시 관련 코드 수정
+
+#### 3-C: 5에이전트 검증
+
+빌드 검증 통과 후, 5개 planning 에이전트로 구현 결과를 검증한다.
+
+**반드시 Agent 도구를 사용하여 5개 서브에이전트를 동시에 병렬 실행한다.**
+
+각 에이전트에게 전달할 프롬프트:
+
+1. **에이전트 역할 지침**: `agents/planning/<name>.md` 전체 내용
+2. **원래 계획**: 해당 Phase의 계획 내용
+3. **구현된 코드 diff**: 현재 작업 중인 변경사항
+   ```bash
+   git diff
+   ```
+   (staged 변경이 있으면 `git diff --cached`도 포함)
+4. **검증 요청**: 아래 형식으로 요청
+
+```
+이 Phase의 구현 결과를 검증하세요.
+
+1. 계획대로 구현되었는지 확인
+2. 누락된 구현이 있는지 확인
+3. 구현 품질 이슈 (보안, 성능, 설계, 테스트, DX)를 보고
+
+응답은 반드시 JSON 배열이어야 합니다.
+마크다운 코드블록(```)으로 감싸지 마세요. 앞뒤 설명 텍스트도 넣지 마세요.
+순수한 JSON 배열만 반환하세요.
+
+[
+  {
+    "category": "카테고리",
+    "severity": "Critical|Major|Minor|Misc",
+    "title": "이슈 제목",
+    "description": "상세 설명",
+    "file": "파일경로",
+    "suggestion": "수정 권장안"
+  }
+]
+
+이슈가 없으면 빈 배열 []을 반환하세요.
+```
+
+에이전트별 설정:
+
+| 에이전트 | 파일 경로 | subagent_type | model |
+|----------|----------|---------------|-------|
+| Architect | `agents/planning/architect.md` | general-purpose | sonnet |
+| Security Engineer | `agents/planning/security-engineer.md` | general-purpose | sonnet |
+| Performance Engineer | `agents/planning/performance-engineer.md` | general-purpose | sonnet |
+| QA Engineer | `agents/planning/qa-engineer.md` | general-purpose | sonnet |
+| DX Engineer | `agents/planning/dx-engineer.md` | general-purpose | sonnet |
+
+**검증 결과 처리**:
+
+1. 에이전트 응답 파싱 (JSON → fallback `[...]` 추출 → 실패 시 스킵)
+2. 이슈 통합 및 severity 정렬
+3. 결과를 계획 파일에 기록:
+
+```markdown
+#### Phase 1 검증 결과
+| Severity | 개수 |
+|----------|------|
+| 🔴 Critical | N |
+| 🟠 Major | N |
+| 🟡 Minor | N |
+| 🔵 Misc | N |
+```
+
+4. 사용자에게 요약 출력:
+
+```
+🔍 Phase 1 검증: 🔴 N / 🟠 N / 🟡 N / 🔵 N
+```
+
+**Critical/Major가 있으면**:
+1. 해당 이슈를 자동 수정 (reinforce와 동일한 수정 절차)
+2. 수정 후 타입 체크 + 테스트 재실행
+3. 수정 결과를 계획 파일에 기록
+4. 계획 파일의 검증 결과 섹션에 수정 내역 추가:
+
+```markdown
+#### Phase 1 수정 내역
+| # | 이슈 | 상태 | 수정 내용 |
+|---|------|------|----------|
+| 1 | XSS 취약점 | ✅ 수정 | sanitize 적용 |
+```
+
+**Critical/Major가 0이면**: 다음 Phase로 진행
+
+---
+
+### Step 4: 최종 요약 및 계획 파일 업데이트
+
+모든 Phase가 완료되면:
+
+#### 4-1: 계획 파일 최종 업데이트
+
+계획 파일 하단에 실행 결과를 추가한다:
+
+```markdown
+---
+
+## 실행 결과
+
+| 항목 | 값 |
+|------|-----|
+| 실행 일시 | <YYYY-MM-DD HH:MM> |
+| 실행 스킬 | `/roto-band-plan-execute` |
+| 총 Phase | N |
+| 완료 Phase | N |
+| 총 작업 | N |
+| 완료 작업 | N |
+| 실패 작업 | N |
+| 검증 이슈 (수정됨) | N |
+| 검증 이슈 (잔여) | N |
+
+### 수정된 파일
+- `path/to/file1.ts` (신규)
+- `path/to/file2.tsx` (수정)
+
+### 검증 결과
+- TypeScript: ✅ 통과
+- 테스트: ✅ N개 통과
+
+### 잔여 이슈 (Minor/Misc)
+- 🟡 [에이전트명] 이슈 제목 — `파일:라인`
+
+---
+🤖 Generated by `/roto-band-plan-execute` | plan-driven implementation with 5-agent verification
+```
+
+#### 4-2: 대화 창 최종 요약
+
+```markdown
+## 🏁 구현 완료
+
+| 항목 | 값 |
+|------|-----|
+| 총 Phase | N |
+| 완료 작업 | N / N |
+| 검증 이슈 수정 | N건 |
+| 잔여 이슈 | 🟡 N / 🔵 N |
+| 계획 파일 | `plans/plan-<title>.md` |
+
+### 수정된 파일
+- `path/to/file1.ts` (신규)
+- `path/to/file2.tsx` (수정)
+```
+
+마지막으로 커밋 여부를 사용자에게 확인한다.
+
+---
+
+## 도구 사용 규칙
+
+Bash 대신 Claude 전용 도구를 우선 사용한다:
+
+| 작업 | 사용할 도구 | Bash 사용 금지 |
+|------|-----------|---------------|
+| 파일 읽기 | **Read** | `cat`, `head`, `tail` |
+| 파일 수정 | **Edit** | `sed`, `awk` |
+| 파일 생성 | **Write** (디렉토리 자동 생성) | `mkdir -p` + `echo >` |
+| 파일 검색 | **Glob** | `find`, `ls` |
+| 코드 내용 검색 | **Grep** | `grep`, `rg` |
+| 계획 파일 업데이트 | **Edit** | `sed` |
+
+Bash는 아래 경우에만 사용한다:
+- `git diff` (변경사항 확인)
+- `npx tsc --noEmit` (타입 체크)
+- 프로젝트 테스트 명령
+
+## 오류 처리
+
+| 상황 | 처리 |
+|------|------|
+| 인자 없음 | `[ERROR] 계획 파일 경로 또는 작업 설명을 입력해주세요.` |
+| 계획 파일 없음 | `[ERROR] 계획 파일을 찾을 수 없습니다: <경로>` |
+| Phase 파싱 실패 | `[ERROR] 계획에서 Phase를 찾을 수 없습니다. Phase 형식을 확인해주세요.` |
+| 서브에이전트 전원 실패 | `[ERROR] 모든 에이전트가 실패했습니다. 다시 시도해주세요.` |
+| 일부 에이전트 실패 | 실패 에이전트 로그, 나머지 결과로 진행 |
+| 구현 중 에러 | 해당 작업 `❌` 표시 + 사유 기록, 나머지 계속 |
+| 타입 체크/테스트 실패 | 수정 시도, 실패 시 사유 기록 후 다음 Phase로 진행 |
+| 사용자가 특정 Phase만 지정 | 해당 Phase만 실행, 이전 Phase는 완료된 것으로 간주 |

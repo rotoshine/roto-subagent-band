@@ -8,6 +8,8 @@ user-invocable: true
 
 7개의 전문화된 서브 에이전트(UI Designer, Senior FE, Junior FE, BE Engineer, SEO Specialist, i18n Reviewer, Claude Config Reviewer)가 각각의 관점에서 PR을 리뷰하고, 결과를 markdown 보고서로 통합한 뒤 인라인 코멘트 + PR 요약 코멘트를 남기는 스킬입니다.
 
+**모든 출력은 한국어로 작성한다.** PR 코멘트, 요약, 대화 창 출력 등 사용자에게 보이는 모든 텍스트는 한국어를 사용할 것.
+
 ## 사용 방법
 
 ```text
@@ -55,7 +57,7 @@ user-invocable: true
      ```
 4. PR 번호가 양의 정수가 아닌 값이면 에러:
    ```
-   [ERROR] PR_NUMBER must be a positive integer. Got: '<VALUE>'
+   [ERROR] PR 번호는 양의 정수여야 합니다. 입력값: '<VALUE>'
    ```
 
 ### Step 2: PR 존재 여부 및 스킵 조건 확인
@@ -401,6 +403,6 @@ Bash는 아래 경우에만 사용한다:
 | 상황 | 메시지 |
 |------|--------|
 | GitHub 인증 실패 | `[ERROR] GitHub authentication required. Run: gh auth login` |
-| PR 미존재 | `[ERROR] PR #<NUMBER> not found. Verify the PR number.` |
-| 서브 에이전트 전원 실패 | `[ERROR] All agents failed. Please retry.` |
+| PR 미존재 | `[ERROR] PR #<NUMBER>을 찾을 수 없습니다.` |
+| 서브 에이전트 전원 실패 | `[ERROR] 모든 에이전트가 실패했습니다. 다시 시도해주세요.` |
 | 일부 에이전트 실패 | 실패한 에이전트 이름을 로그하고, 성공한 에이전트 결과로 진행 |

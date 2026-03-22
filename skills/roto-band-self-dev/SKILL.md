@@ -212,8 +212,8 @@ Bash는 아래 경우에만 사용한다:
 | 상황 | 처리 |
 |------|------|
 | GitHub 인증 실패 | `[ERROR] GitHub authentication required. Run: gh auth login` |
-| PR 미존재 | `[ERROR] PR #<NUMBER> not found.` |
-| 서브 에이전트 전원 실패 | `[ERROR] All agents failed. Please retry.` |
+| PR 미존재 | `[ERROR] PR #<NUMBER>을 찾을 수 없습니다.` |
+| 서브 에이전트 전원 실패 | `[ERROR] 모든 에이전트가 실패했습니다. 다시 시도해주세요.` |
 | 일부 에이전트 실패 | 실패 에이전트 이름 로그, 나머지 결과로 진행 |
 | 이슈 0건 | `리뷰 결과 이슈가 없습니다. 코드가 양호합니다!` 출력 후 종료 |
 | 수정 중 에러 | 해당 이슈 스킵 + 사유 기록, 나머지 계속 |

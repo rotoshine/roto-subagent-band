@@ -8,10 +8,12 @@ user-invocable: true
 
 서브에이전트들이 참조하는 외부 스킬의 설치 여부를 확인하고, 누락된 스킬을 자동 설치합니다.
 
+**모든 출력은 한국어로 작성한다.**
+
 ## 사용 방법
 
 ```text
-/check-dependencies [--install] [--dry-run]
+/roto-band-check-deps [--install] [--dry-run]
 ```
 
 | 인자 | 설명 |

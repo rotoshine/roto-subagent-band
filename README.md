@@ -2,7 +2,7 @@
 
 멀티 서브에이전트 기반 코드 리뷰 + 구현 계획 플러그인 for Claude Code.
 
-## 포함 스킬 (7개)
+## 포함 스킬 (9개)
 
 ### 코드 리뷰 계열
 
@@ -11,6 +11,7 @@
 | `/roto-band-code-review` | PR을 7개 에이전트가 병렬 리뷰 → 인라인 코멘트 + PR 요약 게시 |
 | `/roto-band-self-dev` | 리뷰 후 사용자와 협의하며 직접 코드 수정 (GitHub 코멘트 없음) |
 | `/roto-band-reinforce` | self-dev 리뷰→수정을 자동 반복, Critical/Major 0이 될 때까지 강화 |
+| `/roto-band-test-gen` | 변경 코드를 7에이전트가 분석 → 누락 테스트 식별 → 자동 생성 |
 | `/roto-band-review-apply` | PR에 남겨진 리뷰 코멘트를 수집 → 타당성 검토 → 코드 반영 |
 
 ### 구현 계획 계열
@@ -18,6 +19,7 @@
 | 스킬 | 설명 |
 |------|------|
 | `/roto-band-plan` | 5개 에이전트가 코드베이스 분석 → 다각도 구현 계획 수립 |
+| `/roto-band-plan-execute` | 구현 계획 markdown 기반 Phase별 구현 + 5에이전트 검증 루프 |
 | `/roto-band-plan-review` | 기존 구현 계획을 5개 에이전트가 검토 → 누락/리스크/개선점 보고 |
 
 ### 유틸리티
@@ -74,11 +76,15 @@ claude plugins add roto/roto-subagent-band
 /roto-band-self-dev                 # 리뷰 + 직접 수정
 /roto-band-reinforce                # 반복 리뷰+수정 (Critical/Major 0까지)
 /roto-band-reinforce --max-rounds 5 # 최대 5회 반복
+/roto-band-test-gen                 # 변경 코드 기반 테스트 자동 생성
+/roto-band-test-gen --scope all     # unit + integration + e2e 전체
 /roto-band-review-apply             # 리뷰 코멘트 반영
 
 # 구현 계획
 /roto-band-plan 사용자 프로필에 활동 타임라인 추가
-/roto-band-plan-review docs/plan.md  # 기존 계획 검토
+/roto-band-plan-execute docs/plan-timeline.md  # 계획 파일로 구현
+/roto-band-plan-execute 관리자 대시보드 구현    # 계획 수립→구현 한번에
+/roto-band-plan-review docs/plan.md             # 기존 계획 검토
 ```
 
 ## 라이선스
