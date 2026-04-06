@@ -1,24 +1,24 @@
 {
-  "name": "roto-subagent-band",
+  "name": "roto-claude-skills",
   "owner": {
     "name": "roto"
   },
   "metadata": {
-    "description": "7개 전문 서브에이전트 기반 멀티 관점 코드 리뷰, 구현 계획, 강화 리뷰 플러그인"
+    "description": "멀티 에이전트 코드 리뷰, 구현 계획, 스토리북 스크린샷 등 개인 커스텀 스킬 모음"
   },
   "plugins": [
     {
-      "name": "roto-subagent-band",
+      "name": "roto-claude-skills",
       "source": "./",
-      "description": "7개 전문 서브에이전트 기반 멀티 관점 코드 리뷰, 구현 계획, 강화 리뷰 플러그인",
-      "version": "0.6.0",
+      "description": "멀티 에이전트 코드 리뷰, 구현 계획, 스토리북 스크린샷 등 개인 커스텀 스킬 모음",
+      "version": "0.7.0",
       "author": {
         "name": "roto"
       },
-      "homepage": "https://github.com/rotoshine/roto-subagent-band",
-      "repository": "https://github.com/rotoshine/roto-subagent-band",
+      "homepage": "https://github.com/rotoshine/roto-claude-skills",
+      "repository": "https://github.com/rotoshine/roto-claude-skills",
       "license": "MIT",
-      "keywords": ["code-review", "planning", "multi-agent", "subagent", "reinforce"]
+      "keywords": ["code-review", "planning", "multi-agent", "subagent", "reinforce", "storybook", "screenshot"]
     }
   ]
 }

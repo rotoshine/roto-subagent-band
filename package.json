@@ -1,7 +1,7 @@
 {
-  "name": "roto-subagent-band",
+  "name": "roto-claude-skills",
   "version": "0.1.0",
-  "description": "Multi-agent code review plugin for Claude Code",
+  "description": "Multi-agent code review, planning, and Storybook screenshot skills for Claude Code",
   "author": "roto",
   "license": "MIT",
   "keywords": [
@@ -9,6 +9,8 @@
     "plugin",
     "code-review",
     "multi-agent",
-    "subagent"
+    "subagent",
+    "storybook",
+    "screenshot"
   ]
 }
