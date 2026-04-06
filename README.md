@@ -2,7 +2,7 @@
 
 개인 커스텀 스킬 모음 for Claude Code — 멀티 에이전트 코드 리뷰, 구현 계획, 스토리북 스크린샷 등.
 
-## 포함 스킬 (11개)
+## 포함 스킬 (17개)
 
 ### 코드 리뷰 계열
 
@@ -28,6 +28,27 @@
 | 스킬 | 설명 |
 |------|------|
 | `/roto-storybook-screenshots` | 변경된 스토리를 Light/Dark 모드로 캡처 → PR에 스크린샷 테이블 반영 |
+| `/roto-storybook-changelog` | 브랜치의 UI 변경사항을 분석하여 Storybook 패치노트(MDX + stories) 생성 |
+
+### 테스트
+
+| 스킬 | 설명 |
+|------|------|
+| `/roto-generate-tests` | 파일/컴포넌트에 대한 포괄적 테스트 스위트 자동 생성 |
+
+### Git Worktree
+
+| 스킬 | 설명 |
+|------|------|
+| `/roto-wt-create` | origin/main 기준으로 새 git worktree 생성 (worktrunk CLI) |
+| `/roto-wt-switch` | worktree 목록 표시 및 전환 |
+| `/roto-wt-clean` | worktree 삭제 및 브랜치 정리 |
+
+### 사고 도구
+
+| 스킬 | 설명 |
+|------|------|
+| `/roto-ultra-think` | 다차원 분석과 깊은 문제 해결을 위한 구조화된 사고 프레임워크 |
 
 ### 유틸리티
 
@@ -93,9 +114,22 @@
 /roto-band-plan-reinforce plans/plan.md
 /roto-band-plan-review docs/plan.md
 
-# 스토리북 스크린샷
+# 스토리북
 /roto-storybook-screenshots                          # 변경된 스토리 자동 감지 + 캡처
 /roto-storybook-screenshots --stories stamp,stamp-entered  # 특정 스토리만 캡처
+/roto-storybook-changelog                            # UI 변경 패치노트 생성
+
+# 테스트
+/roto-generate-tests src/lib/auth.ts                 # 특정 파일 테스트 생성
+/roto-generate-tests UserProfile                     # 컴포넌트 테스트 생성
+
+# Git Worktree
+/roto-wt-create fix/search-console                   # 새 worktree 생성
+/roto-wt-switch                                      # worktree 목록 + 전환
+/roto-wt-clean                                       # 현재 worktree 삭제
+
+# 사고 도구
+/roto-ultra-think 마이크로서비스 마이그레이션 vs 모놀리스 개선?
 ```
 
 ## 라이선스
