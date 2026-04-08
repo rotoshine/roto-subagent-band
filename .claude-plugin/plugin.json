@@ -1,6 +1,6 @@
 {
   "name": "roto-claude-skills",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "멀티 에이전트 코드 리뷰, 구현 계획, 스토리북 스크린샷 등 개인 커스텀 스킬 모음",
   "author": {
     "name": "roto"

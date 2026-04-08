@@ -98,9 +98,17 @@
 ## 설치
 
 ```bash
-# 마켓플레이스에서 설치
-/install rotoshine/roto-claude-skills
+# 1. 마켓플레이스 추가
+/plugin marketplace add rotoshine/roto-claude-skills
+
+# 2. 플러그인 설치
+/plugin install roto-claude-skills@rotoshine-roto-claude-skills
+
+# 3. 플러그인 리로드
+/reload-plugins
 ```
+
+또는 `/plugin` → **Marketplaces** 탭에서 `rotoshine/roto-claude-skills` 추가 → **Discover** 탭에서 설치할 수 있습니다.
 
 ## 설치 후 의존성 체크
 
